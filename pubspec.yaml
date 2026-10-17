@@ -1,0 +1,33 @@
+name: android_attestation
+description: >-
+  Android hardware key attestation for Flutter: verified boot state, boot key,
+  bootloader lock and patch level, plus an offline GrapheneOS check.
+version: 0.1.0
+repository: https://github.com/oxisoft/android_attestation
+issue_tracker: https://github.com/oxisoft/android_attestation/issues
+topics:
+  - attestation
+  - security
+  - grapheneos
+  - android
+  - keystore
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: io.oxisoft.android_attestation
+        pluginClass: AndroidAttestationPlugin
