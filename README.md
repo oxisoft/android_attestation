@@ -78,6 +78,10 @@ and verify it there.
 `example/` is a small app that attests the device and shows (and copies) a
 full report, including the certificate chain.
 
+## Reporting a vulnerability
+
+Email security@oxisoft.io, not a public issue. See [SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT, by [OxiSoft](https://oxisoft.io). Not affiliated with the GrapheneOS
