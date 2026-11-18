@@ -1,3 +1,9 @@
+## Unreleased
+
+- `tool/check_grapheneos_keys.dart` and a weekly `keys-drift` workflow
+  compare the bundled GrapheneOS keys with upstream `attestation.json` and
+  open an issue on drift. No change to the package API.
+
 ## 0.1.1
 
 - Example app uses `package:material_ui` (Flutter 3.47+ deprecates

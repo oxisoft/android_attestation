@@ -54,6 +54,34 @@ hardware can no longer vouch for what is running.
 New devices: pass keys this version does not know yet with
 `isGrapheneOS(extraVerifiedBootKeys: {...})`.
 
+## GrapheneOS keys
+
+The bundled list (`lib/src/grapheneos_keys.dart`) is checked against
+upstream every week by the `keys-drift` workflow. On a difference it opens
+(or updates) an issue titled "GrapheneOS keys changed upstream" with the
+added and removed keys. Run the same check locally with the Dart SDK alone:
+
+```sh
+dart run tool/check_grapheneos_keys.dart   # exit 0 in sync, 1 drift, 2 error
+```
+
+To refresh the list, verify the signature first. The signing key below is
+the GrapheneOS key pinned here; do not take it from the same server as the
+file:
+
+```sh
+curl -sO https://grapheneos.org/attestation.json
+curl -sO https://grapheneos.org/attestation.json.sig
+echo 'contact@grapheneos.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUg/m5CoP83b0rfSCzYSVA4cw4ir49io5GPoxbgxdJE' > allowed_signers
+ssh-keygen -Y verify -f allowed_signers -I contact@grapheneos.org \
+  -n "attestation keys" -s attestation.json.sig < attestation.json
+```
+
+Then update the keys, device names (from the
+[compatibility guide](https://grapheneos.org/articles/attestation-compatibility-guide))
+and `grapheneOSVerifiedBootKeysTimestamp`, add a CHANGELOG entry and release
+a patch version.
+
 ## Revocation
 
 Attestation can be faked with leaked device keys. Google publishes the

@@ -1,0 +1,42 @@
+name: keys-drift
+
+# Weekly: are the bundled GrapheneOS verified boot keys still the ones
+# GrapheneOS publishes? On drift, open or update one issue with the diff.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+      - name: Compare bundled keys with upstream
+        id: check
+        run: |
+          set +e
+          dart run tool/check_grapheneos_keys.dart --report drift.md
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -eq 2 ]; then exit 1; fi
+          exit 0
+      - name: Open or update the drift issue
+        if: steps.check.outputs.code == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="GrapheneOS keys changed upstream"
+          number=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file drift.md
+            gh issue comment "$number" --body "Still differs on $(date -u +%F) (run ${{ github.run_id }})."
+          else
+            gh issue create --title "$title" --body-file drift.md
+          fi
+          exit 1
