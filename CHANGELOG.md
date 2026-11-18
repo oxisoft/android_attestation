@@ -1,3 +1,9 @@
+## 0.1.1
+
+- Example app uses `package:material_ui` (Flutter 3.47+ deprecates
+  `package:flutter/material.dart`). No change to the package itself.
+- Published from GitHub Actions (pub.dev automated publishing).
+
 ## 0.1.0
 
 - First release.
