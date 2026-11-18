@@ -16,10 +16,23 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v7
+      - name: Skip if this version is already on pub.dev
+        id: check
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          if curl -sf https://pub.dev/api/packages/android_attestation | grep -q "\"version\":\"$v\""; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Version $v is already published, nothing to do."
+          fi
       - uses: dart-lang/setup-dart@v1
+        if: steps.check.outputs.skip != 'true'
       - uses: subosito/flutter-action@v2
+        if: steps.check.outputs.skip != 'true'
         with:
           channel: stable
       - run: flutter pub get
+        if: steps.check.outputs.skip != 'true'
       - run: flutter test
+        if: steps.check.outputs.skip != 'true'
       - run: flutter pub publish --force
+        if: steps.check.outputs.skip != 'true'
