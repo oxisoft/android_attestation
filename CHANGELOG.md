@@ -3,6 +3,9 @@
 - `tool/check_grapheneos_keys.dart` and a weekly `keys-drift` workflow
   compare the bundled GrapheneOS keys with upstream `attestation.json` and
   open an issue on drift. No change to the package API.
+- Build tooling: Android Gradle Plugin 9.5.1, Gradle 9.9.1 (example),
+  Kotlin 2.4.21 (example). CI now builds the example APK. No change to the
+  package API.
 
 ## 0.1.1
 

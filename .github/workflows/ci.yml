@@ -18,3 +18,21 @@ jobs:
       - run: flutter analyze
       - run: flutter test
       - run: flutter pub publish --dry-run
+
+  android:
+    # Builds the plugin's Java side and the example APK, so an AGP/Gradle
+    # break shows up here and not first in an app that uses the package.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - working-directory: example
+        run: flutter pub get
+      - working-directory: example
+        run: flutter build apk --debug
